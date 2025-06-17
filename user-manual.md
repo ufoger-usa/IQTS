@@ -1,3 +1,8 @@
+---
+layout: default
+title: IQTS AI Trading Dashboard - User Manual
+---
+
 # IQTS AI Trading Dashboard - User Manual
 
 ## Table of Contents
