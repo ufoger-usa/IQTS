@@ -41,34 +41,39 @@
     --subtext-color: var(--dark-subtext);
 }
 
-/* Ensure no scrolling on the main page */
-html, body {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+/* Ensure proper scrolling on the main page */
+html {
+    height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
-    font-size: 14px; /* Reduced base font size for compact view */
-    background-color: var(--bg);
-    color: var(--text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Main container layout with grid */
 .compact-container {
     display: grid;
-    grid-template-columns: 200px 1fr 200px;
-    grid-template-rows: 36px 70px 1fr;
+    grid-template-columns: 220px 1fr 220px;
+    grid-template-rows: 36px 80px 1fr;
     grid-template-areas:
         "header header header"
         "stats stats stats"
         "left-panel main-panel right-panel";
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
+    width: 100%;
     gap: 1px;
-    overflow: hidden;
-    padding: 4px;
+    padding: 5px;
     box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Header Area */
@@ -150,13 +155,12 @@ html, body {
     gap: 1px;
     background-color: var(--bg);
     padding: 1px;
-    height: 70px;
-    font-size: 0.9em;
+    height: 100px;
 }
 
 .stat-box {
     background-color: var(--panel-bg);
-    padding: 4px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -677,4 +681,31 @@ h1, h2, h3, h4, h5, h6, p {
         padding: 8px 10px;
         font-size: 12px;
     }
+}
+
+/* Panel scrolling */
+.left-panel, .right-panel, .main-panel {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 122px); /* Subtract header and stats height */
+    padding-right: 5px; /* Add space for scrollbar */
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-element);
 }
