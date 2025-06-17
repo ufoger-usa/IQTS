@@ -709,3 +709,18 @@ h1, h2, h3, h4, h5, h6, p {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--dark-element);
 }
+
+/* Logo Styles */
+.site-logo {
+    height: 40px;
+    width: auto;
+    margin: 10px;
+    vertical-align: middle;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #1a1a1a;
+}
