@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Keep existing meta tags and title -->
+    <style>        /* Consolidated CSS - Monochrome Black Color Scheme */
+        :root {
+            --primary: #ffffff; /* White for primary actions */
+            --positive: #ffffff; /* White for positive values */
+            --negative: #cccccc; /* Light gray for negative values */
+            --neutral: #888888; /* Medium gray for neutral elements */
+            --bg: #000000; /* Pure black background */
+            --panel-bg: #111111; /* Slightly lighter black for panels */
+            --text: #ffffff; /* White text */
+            --border: #333333; /* Dark gray borders */
+            --header-bg: #000000; /* Black header */
+            --tab-bg: #222222; /* Dark gray tabs */
+            --watchlist-bg: #1a1a1a; /* Slightly lighter than panel */
+            --signal-bg: #151515; /* Dark background for signals */
+            --auto-buy: rgba(255, 255, 255, 0.1); /* White with low opacity */
+            --auto-sell: rgba(204, 204, 204, 0.1); /* Light gray with low opacity */
+            --high-confidence: #ffffff; /* White */
+            --medium-confidence: #aaaaaa; /* Light gray */
+            --low-confidence: #666666; /* Dark gray */
+        }
+
+        .dark-mode {
+            --primary: #ffffff; /* Keep white for primary actions */
+            --positive: #ffffff; /* White for positive values */
+            --negative: #cccccc; /* Light gray for negative values */
+            --neutral: #888888; /* Medium gray for neutral elements */
+            --bg: #000000; /* Pure black background */
+            --panel-bg: #111111; /* Slightly lighter black for panels */
+            --text: #ffffff; /* White text */
+            --border: #333333; /* Dark gray borders */
+            --header-bg: #000000; /* Black header */
+            --tab-bg: #222222; /* Dark gray tabs */
+            --watchlist-bg: #1a1a1a; /* Slightly lighter than panel */
+            --signal-bg: #151515; /* Dark background for signals */
+            --auto-buy: rgba(255, 255, 255, 0.1); /* White with low opacity */
+            --auto-sell: rgba(204, 204, 204, 0.1); /* Light gray with low opacity */
+            --high-confidence: #ffffff; /* White */
+            --medium-confidence: #aaaaaa; /* Light gray */
+            --low-confidence: #666666; /* Dark gray */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .compact-panel {
+            background-color: var(--panel-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .tabbed-interface {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .tab-button {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: var(--panel-bg);
+        }
+
+        .tab-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }        /* Add other necessary compact styles */
+
+        /* Additional style adjustments for monochrome black scheme */
+        button, input[type="submit"] {
+            color: #000000; /* Black text on buttons */
+            border: 1px solid var(--border);
+        }
+
+        .buy-btn {
+            background-color: var(--text); /* White background */
+            color: #000000 !important; /* Black text */
+        }
+
+        .sell-btn {
+            background-color: var(--neutral); /* Gray background */
+            color: #000000 !important; /* Black text */
+        }
+
+        .tab-button.active {
+            color: #000000; /* Black text for active tabs */
+        }
+
+        .market-open {
+            background-color: var(--text); /* White for open market */
+        }
+
+        .market-closed {
+            background-color: var(--neutral); /* Gray for closed market */
+        }
+
+        .market-prepost {
+            background-color: var(--medium-confidence); /* Light gray for pre/post market */
+        }
+
+        /* Adjust chart colors */
+        #tradingview-chart, .tradingview-widget-container, canvas {
+            filter: grayscale(100%) contrast(120%);
+        }
+
+        /* Table row hover effect */
+        tr:hover {
+            background-color: #222222 !important;
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border: 1px solid var(--border);
+        }
+
+        /* Input fields */
+        input, select, textarea {
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        /* Disabled elements */
+        button:disabled {
+            background-color: #333333 !important;
+            color: #666666 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-controls">
+        <h1>IQTS AI Trading 
+            <span id="alpaca-status" class="alpaca-disconnected">Disconnected</span>
+        </h1>
+        <div class="mode-toggle">
+            <button id="dark-mode-toggle">Dark</button>
+            <button id="light-mode-toggle">Light</button>
+            <button id="paper-mode-toggle">Paper</button>
+            <button id="live-mode-toggle">Live</button>
+        </div>
+    </div>
+
+    <!-- Compact Market Status -->
+    <div class="compact-panel market-status">
+        <div id="market-status-text">Loading...</div>
+        <div id="market-timer" style="font-size:0.9em;"></div>
+    </div>
+
+    <!-- Tabbed Interface -->
+    <div class="tabbed-interface">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="trades">Trades</button>
+            <button class="tab-button" data-tab="signals">Signals</button>
+            <button class="tab-button" data-tab="automation">Automation</button>
+        </div>
+
+        <div class="tab-content active" id="dashboard-tab">
+            <!-- Consolidated dashboard content -->
+            <div class="stats-grid">
+                <!-- Key metrics only -->
+            </div>
+            <div id="tradingview-chart" style="height:300px;"></div>
+        </div>
+
+        <div class="tab-content" id="trades-tab">
+            <!-- Active trades and history -->
+        </div>
+
+        <div class="tab-content" id="signals-tab">
+            <!-- AI signals -->
+        </div>
+
+        <div class="tab-content" id="automation-tab">
+            <!-- Auto-trading controls -->
+        </div>
+    </div>
+
+    <script>
+        // Simplified initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Update active tab button
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Update active tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+
+            // Initialize other components
+            initDashboard();
+        });
+
+        // Rest of your existing JavaScript with optimizations:
+        // 1. Combine similar functions
+        // 2. Reduce DOM queries by caching elements
+        // 3. Implement lazy loading for less critical components
+        // 4. Optimize price update intervals
+    </script>
+</body>
+</html>

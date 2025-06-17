@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Integration Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #4285F4;
+            padding-bottom: 10px;
+            color: #4285F4;
+        }
+        h2 {
+            color: #0F9D58;
+            margin-top: 30px;
+        }
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .step {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-left: 4px solid #4285F4;
+            background-color: #f8f9fa;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .note {
+            padding: 10px;
+            background-color: #FFF9C4;
+            border-left: 4px solid #FFEB3B;
+            margin: 20px 0;
+        }
+        .warning {
+            padding: 10px;
+            background-color: #FFEBEE;
+            border-left: 4px solid #F44336;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3367D6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google Sheets Integration Guide</h1>
+    
+    <div class="note">
+        <p><strong>Note:</strong> This guide will help you set up Google Sheets integration for your IQTS Trading Bot's trade journal.</p>
+    </div>
+    
+    <h2>1. Google Cloud Project Setup</h2>
+    
+    <div class="step">
+        <ol>
+            <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+            <li>Create a new project or select an existing one</li>
+            <li>Enable the Google Sheets API for your project:
+                <ul>
+                    <li>Navigate to "APIs & Services" > "Library"</li>
+                    <li>Search for "Google Sheets API"</li>
+                    <li>Click "Enable"</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+    <h2>2. Create Credentials</h2>
+    
+    <div class="step">
+        <ol>
+            <li>Go to "APIs & Services" > "Credentials"</li>
+            <li>Click "Create Credentials" and select "API Key"</li>
+            <li>Copy your API key</li>
+            <li>Optionally, restrict the API key to only allow Google Sheets API</li>
+            <li>Next, click "Create Credentials" again and select "OAuth client ID"</li>
+            <li>Choose "Web application" as the application type</li>
+            <li>Add your domain to the authorized JavaScript origins</li>
+            <li>Add your domain to the authorized redirect URIs</li>
+            <li>Download the JSON file with your credentials</li>
+        </ol>
+    </div>
+    
+    <h2>3. Update Your Code</h2>
+    
+    <div class="step">
+        <p>Open the <code>tradeLogger.js</code> file and update the following line with your API key:</p>
+        <pre>apiKey: 'YOUR_API_KEY', // Replace with your actual API key</pre>
+        
+        <p>Then update the client ID with the one from your downloaded OAuth credentials:</p>
+        <pre>clientId: 'your-client-id', // From credentials.json</pre>
+    </div>
+    
+    <h2>4. Creating a Google Sheet</h2>
+    
+    <div class="step">
+        <p>There are two ways to create a Google Sheet for your trade journal:</p>
+        
+        <h3>Automatic Creation (Recommended)</h3>
+        <p>When you initialize the TradeLogger without specifying a sheet ID, it will automatically create a new Google Sheet for you:</p>
+        <pre>await window.tradeLogger.init();</pre>
+        
+        <p>The first time you run this, you will need to authorize the application to access your Google Sheets.</p>
+        
+        <h3>Manual Creation</h3>
+        <p>You can also manually create a new Google Sheet from the browser console:</p>
+        <pre>await window.createNewTradeJournal();</pre>
+        
+        <p>This will create a new Google Sheet, set up the appropriate headers and formatting, and return the spreadsheet ID.</p>
+    </div>
+    
+    <h2>5. Using an Existing Google Sheet</h2>
+    
+    <div class="step">
+        <p>If you already have a Google Sheet that you want to use, you can initialize the TradeLogger with the spreadsheet ID:</p>
+        <pre>await window.tradeLogger.init('your-spreadsheet-id');</pre>
+        
+        <p>You can find the spreadsheet ID in the URL of your Google Sheet:</p>
+        <code>https://docs.google.com/spreadsheets/d/<strong>spreadsheet-id</strong>/edit</code>
+    </div>
+    
+    <div class="warning">
+        <p><strong>Important:</strong> Make sure your Google Sheet has the appropriate permissions. The user accessing the application will need edit access to the sheet.</p>
+    </div>
+    
+    <h2>6. Test the Integration</h2>
+    
+    <div class="step">
+        <p>To test the integration, you can log a sample trade:</p>
+        <pre>
+window.tradeLogger.logTrade({
+    symbol: "AAPL",
+    type: "buy",
+    price: "150.25",
+    quantity: "10",
+    percentReturn: "0.0",
+    confidence: "high",
+    notes: "Test trade"
+});
+</pre>
+        <p>Then sync your trades to Google Sheets:</p>
+        <pre>await window.tradeLogger.syncAllTrades();</pre>
+    </div>
+    
+    <h2>7. View Performance Analytics</h2>
+    
+    <div class="step">
+        <p>To update the performance analytics sheet:</p>
+        <pre>await window.tradeLogger.updatePerformanceSheet();</pre>
+        <p>This will calculate various performance metrics based on your trade data.</p>
+    </div>
+    
+    <button id="create-sheet-btn" onclick="createSheet()">Create New Google Sheet</button>
+    
+    <script>
+        // Load Google API
+        function loadGoogleAPI() {
+            const script = document.createElement('script');
+            script.src = 'https://apis.google.com/js/api.js';
+            script.onload = initializeGoogleAPI;
+            document.body.appendChild(script);
+        }
+        
+        // Initialize the API client
+        function initializeGoogleAPI() {
+            console.log("Google API script loaded");
+        }
+        
+        // Create a new sheet when button is clicked
+        async function createSheet() {
+            if (window.createNewTradeJournal) {
+                try {
+                    const sheetId = await window.createNewTradeJournal();
+                    if (sheetId) {
+                        alert(`New Google Sheet created successfully! ID: ${sheetId}`);
+                    } else {
+                        alert("Failed to create Google Sheet. Check the console for details.");
+                    }
+                } catch (error) {
+                    console.error("Error creating sheet:", error);
+                    alert("Error creating Google Sheet. Make sure you've set up your credentials correctly.");
+                }
+            } else {
+                alert("Trade Logger not loaded. Please make sure you've loaded the TradeLogger.js script.");
+            }
+        }
+        
+        // Load the Google API when the page loads
+        document.addEventListener('DOMContentLoaded', loadGoogleAPI);
+    </script>
+</body>
+</html>

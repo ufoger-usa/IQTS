@@ -1,0 +1,38 @@
+C:\Users\Sergey\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\stable_baselines3\common\vec_env\patch_gym.py:49: UserWarning: You provided an OpenAI Gym environment. We strongly recommend transitioning to Gymnasium environments. Stable-Baselines3 is automatically wrapping your environments in a compatibility layer, which could potentially cause issues.
+  warnings.warn(
+No existing model found, will train a new one
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Starting RL parameter tuning service on port 6001...
+ * Serving Flask app 'rl_tuning'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6001
+ * Running on http://192.168.86.63:6001
+Press CTRL+C to quit
+127.0.0.1 - - [17/Jun/2025 09:37:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:41] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:51] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:01] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:11] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:21] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:31] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:41] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:51] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:01] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:11] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:21] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:31] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:41] "GET /learning-progress HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:51] "GET /learning-progress HTTP/1.1" 200 -

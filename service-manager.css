@@ -1,0 +1,165 @@
+/* service-manager.css - Styles for the service management panel */
+
+.services-panel {
+    background-color: var(--panel-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.services-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.services-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.services-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.services-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.service-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 6px;
+    background-color: var(--tab-bg);
+    border: 1px solid var(--border);
+}
+
+.service-name {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.service-status {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    min-width: 80px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.service-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.service-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.service-start-btn {
+    color: var(--positive);
+}
+
+.service-start-btn:hover:not(:disabled) {
+    background-color: rgba(39, 174, 96, 0.1);
+    border-color: var(--positive);
+}
+
+.service-stop-btn {
+    color: var(--negative);
+}
+
+.service-stop-btn:hover:not(:disabled) {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--negative);
+}
+
+.service-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.service-btn i {
+    font-size: 0.9em;
+}
+
+/* Status colors */
+.status-running {
+    background-color: rgba(39, 174, 96, 0.2);
+    color: var(--positive);
+}
+
+.status-stopped {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: var(--negative);
+}
+
+.status-starting, .status-stopping, .status-partial {
+    background-color: rgba(243, 156, 18, 0.2);
+    color: #f39c12;
+}
+
+.status-error {
+    background-color: rgba(192, 57, 43, 0.2);
+    color: var(--negative);
+}
+
+.status-unknown {
+    background-color: rgba(127, 140, 141, 0.2);
+    color: var(--neutral);
+}
+
+/* Add simple icons */
+.icon-play:before {
+    content: "▶";
+}
+
+.icon-stop:before {
+    content: "■";
+}
+
+.icon-services:before {
+    content: "⚙";
+    font-size: 1.2em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .service-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .service-controls {
+        grid-column: 1 / -1;
+    }
+}

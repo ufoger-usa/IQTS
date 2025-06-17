@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpaca Alternative Connection Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        code {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 2px 5px;
+            font-family: monospace;
+        }
+        pre {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        .note {
+            background: #ffffcc;
+            padding: 10px;
+            border-left: 4px solid #ffcc00;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #ffeeee;
+            padding: 10px;
+            border-left: 4px solid #ff5555;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alpaca Alternative Connection Guide</h1>
+        
+        <p>This guide explains how to connect to Alpaca API when the regular UI method isn't working.</p>
+        
+        <div class="note">
+            <strong>Note:</strong> Only use this method if you're having issues with the regular connection interface.
+        </div>
+        
+        <h2>Method 1: Using the alpaca-credentials.json File</h2>
+        
+        <p>The system automatically looks for a file named <code>alpaca-credentials.json</code> in the root directory if the regular connection fails.</p>
+        
+        <h3>Steps:</h3>
+        <ol>
+            <li>Open the <code>alpaca-credentials.json</code> file in a text editor</li>
+            <li>Replace <code>YOUR_PAPER_KEY_ID</code> with your Alpaca Paper Trading API key</li>
+            <li>Replace <code>YOUR_PAPER_SECRET_KEY</code> with your Alpaca Paper Trading API secret</li>
+            <li>Save the file</li>
+            <li>Refresh the IQTS Trading Dashboard</li>
+        </ol>
+        
+        <h3>Example File Format:</h3>
+        <pre>{
+  "paper": {
+    "keyId": "PK12345ABCDEF",
+    "secretKey": "abcdef123456789"
+  },
+  "live": {
+    "keyId": "AK12345ABCDEF",
+    "secretKey": "xyz987654321"
+  }
+}</pre>
+        
+        <div class="warning">
+            <strong>Warning:</strong> Keep your API keys secure. Don't share this file with others.
+        </div>
+        
+        <h2>Method 2: Using the Alternative Connection Button</h2>
+        
+        <p>The system adds an "Connect Alpaca (Alternative)" button to the interface that will attempt to connect using the credentials from the JSON file.</p>
+        
+        <ol>
+            <li>First, update the <code>alpaca-credentials.json</code> file as described above</li>
+            <li>Look for the "Connect Alpaca (Alternative)" button in the trading panel</li>
+            <li>Click the button to initiate the connection</li>
+        </ol>
+        
+        <h2>Troubleshooting</h2>
+        
+        <p>If you're still having issues connecting to Alpaca:</p>
+        
+        <ol>
+            <li>Check the browser console for error messages (F12 > Console)</li>
+            <li>Verify your API keys are correct</li>
+            <li>Ensure the <code>alpaca-credentials.json</code> file is in the same directory as the main HTML file</li>
+            <li>Try using only the paper trading keys first before using live trading keys</li>
+        </ol>
+        
+        <p>For further assistance, please contact support.</p>
+    </div>
+</body>
+</html>

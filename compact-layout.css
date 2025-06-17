@@ -1,0 +1,680 @@
+/* 
+ * compact-layout.css - Single-page monochrome layout for IQTS ChatBot
+ * Creates a compact monochrome layout that fits on a single screen
+ */
+
+/* Base Color Scheme - Dark Modern Theme with Accents */
+:root {
+    /* Dark Theme Base Colors */
+    --dark-bg: #121212;
+    --dark-panel: #1e1e1e;
+    --dark-element: #2d2d2d;
+    --dark-border: #333333;
+    --dark-text: #e0e0e0;
+    --dark-subtext: #9e9e9e;
+    
+    /* Action Colors */
+    --action-green: #4caf50;
+    --action-red: #f44336;
+    --action-blue: #2196f3;
+    --action-yellow: #ffeb3b;
+    --action-orange: #ff9800;
+    
+    /* Trading Interface Colors */
+    --positive: var(--action-green);
+    --negative: var(--action-red);
+    --neutral: #757575;
+    --highlight: #424242;
+    --header: #1a1a1a;
+    
+    /* Status Colors */
+    --status-running: rgba(76, 175, 80, 0.2);
+    --status-stopped: rgba(244, 67, 54, 0.2);
+    --status-warning: rgba(255, 152, 0, 0.2);
+    
+    /* Set core variables */
+    --bg: var(--dark-bg);
+    --panel-bg: var(--dark-panel);
+    --element-bg: var(--dark-element);
+    --border-color: var(--dark-border);
+    --text-color: var(--dark-text);
+    --subtext-color: var(--dark-subtext);
+}
+
+/* Ensure no scrolling on the main page */
+html, body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-size: 14px; /* Reduced base font size for compact view */
+    background-color: var(--bg);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main container layout with grid */
+.compact-container {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: 36px 70px 1fr;
+    grid-template-areas:
+        "header header header"
+        "stats stats stats"
+        "left-panel main-panel right-panel";
+    height: 100vh;
+    width: 100vw;
+    gap: 1px;
+    overflow: hidden;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+/* Header Area */
+.compact-header {
+    grid-area: header;
+    background-color: var(--header);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--dark-border);
+    height: 36px;
+    z-index: 10;
+}
+
+.compact-header h1 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.market-status {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--subtext-color);
+}
+
+.market-status .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.market-status .pre-market {
+    background-color: var(--action-yellow);
+}
+
+.market-status .market-open {
+    background-color: var(--action-green);
+}
+
+.market-status .after-hours {
+    background-color: var(--action-orange);
+}
+
+.market-status .market-closed {
+    background-color: var(--action-red);
+}
+
+.theme-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.theme-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    border: 1px solid var(--dark-border);
+    background-color: var(--dark-element);
+    color: var(--dark-text);
+    cursor: pointer;
+}
+
+.theme-btn.active {
+    background-color: var(--action-blue);
+    border-color: var(--action-blue);
+}
+
+/* Stats Area */
+.compact-stats {
+    grid-area: stats;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1px;
+    background-color: var(--bg);
+    padding: 1px;
+    height: 70px;
+    font-size: 0.9em;
+}
+
+.stat-box {
+    background-color: var(--panel-bg);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    color: var(--subtext-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.stat-value.positive {
+    color: var(--positive);
+}
+
+.stat-value.negative {
+    color: var(--negative);
+}
+
+.stat-value.currency:before {
+    content: '$';
+}
+
+/* Left Panel - Controls */
+.compact-left-panel {
+    grid-area: left-panel;
+    background-color: var(--panel-bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    max-height: calc(100vh - 136px);
+}
+
+/* Main Panel - Charts and Visualizations */
+.compact-main-panel {
+    grid-area: main-panel;
+    background-color: var(--panel-bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 136px);
+}
+
+/* Right Panel - Auto Trading Controls */
+.compact-right-panel {
+    grid-area: right-panel;
+    background-color: var(--panel-bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border-color);
+    max-height: calc(100vh - 136px);
+}
+
+/* Section Styling */
+.compact-section {
+    background-color: var(--panel-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 8px;
+    margin-bottom: 1px;
+}
+
+.compact-section h3 {
+    font-size: 0.8rem;
+    margin: 0 0 8px 0;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Trading Chart Area */
+.chart-container {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    background-color: var(--element-bg);
+}
+
+#tradingview-chart {
+    width: 100%;
+    height: 100%;
+}
+
+/* Tabs for Main Panel */
+.compact-tabs {
+    display: flex;
+    background-color: var(--element-bg);
+    height: 28px;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.compact-tab {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: var(--subtext-color);
+    transition: background-color 0.2s;
+}
+
+.compact-tab.active {
+    background-color: var(--panel-bg);
+    color: var(--text-color);
+    border-bottom: 2px solid var(--action-blue);
+}
+
+.compact-tab:hover {
+    background-color: var(--highlight);
+}
+
+.compact-tab-content {
+    display: none;
+    height: calc(100% - 28px);
+    overflow: auto;
+}
+
+.compact-tab-content.active {
+    display: block;
+}
+
+/* Auto Trading Toggle Button */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--element-bg);
+    transition: .3s;
+    border-radius: 20px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--text-color);
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--action-green);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Trading Status Indicator */
+.trading-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--neutral);
+}
+
+.status-active {
+    background-color: var(--action-green);
+    box-shadow: 0 0 5px var(--action-green);
+    animation: pulse 2s infinite;
+}
+
+.status-inactive {
+    background-color: var(--action-red);
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* AI Recommendations Panel */
+.ai-recommendations {
+    background-color: var(--panel-bg);
+    padding: 8px;
+}
+
+.recommendation-item {
+    padding: 6px;
+    margin-bottom: 4px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.recommendation-positive {
+    background-color: var(--status-running);
+    border-left: 3px solid var(--action-green);
+}
+
+.recommendation-warning {
+    background-color: var(--status-warning);
+    border-left: 3px solid var(--action-orange);
+}
+
+/* Service Status Items */
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px;
+    margin-bottom: 3px;
+    background-color: var(--element-bg);
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+.service-status {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+    border-radius: 2px;
+    background-color: var(--element-bg);
+}
+
+.status-running {
+    background-color: var(--status-running);
+    color: var(--action-green);
+}
+
+.status-stopped {
+    background-color: var(--status-stopped);
+    color: var(--action-red);
+}
+
+/* Action Buttons */
+.compact-button {
+    background-color: var(--element-bg);
+    border: none;
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: background-color 0.2s;
+}
+
+.compact-button:hover {
+    background-color: var(--highlight);
+}
+
+.compact-button.primary {
+    background-color: var(--action-blue);
+    color: white;
+}
+
+.compact-button.success {
+    background-color: var(--action-green);
+    color: white;
+}
+
+.compact-button.danger {
+    background-color: var(--action-red);
+    color: white;
+}
+
+/* Tables */
+.compact-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.compact-table th {
+    background-color: var(--element-bg);
+    color: var(--text-color);
+    text-align: left;
+    padding: 4px 6px;
+    font-weight: 500;
+}
+
+.compact-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.compact-table tr:hover {
+    background-color: var(--element-bg);
+}
+
+/* Control Panel - Auto Trading */
+.auto-trading-panel {
+    padding: 8px;
+    background-color: var(--panel-bg);
+}
+
+.auto-trading-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.trade-settings {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+.setting-item {
+    padding: 5px;
+    background-color: var(--element-bg);
+    border-radius: 3px;
+}
+
+.setting-label {
+    font-size: 0.7rem;
+    color: var(--subtext-color);
+    margin-bottom: 2px;
+}
+
+/* Radar Animation */
+.radar-visualization {
+    width: 100%;
+    height: 60px;
+    position: relative;
+    overflow: hidden;
+    margin: 8px 0;
+    border-radius: 3px;
+    background-color: var(--element-bg);
+}
+
+.radar-scan {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--action-green) 20deg,
+        transparent 40deg,
+        transparent 360deg
+    );
+    animation: radar-spin 4s linear infinite;
+}
+
+@keyframes radar-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Form Elements */
+.compact-form-group {
+    margin-bottom: 6px;
+}
+
+.compact-form-group label {
+    display: block;
+    font-size: 0.7rem;
+    margin-bottom: 2px;
+    color: var(--subtext-color);
+}
+
+.compact-input {
+    width: 100%;
+    padding: 4px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    background-color: var(--element-bg);
+    color: var(--text-color);
+    font-size: 0.75rem;
+}
+
+.compact-select {
+    width: 100%;
+    padding: 4px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    background-color: var(--element-bg);
+    color: var(--text-color);
+    font-size: 0.75rem;
+}
+
+/* Quick Navigation Menu */
+.quick-nav {
+    background-color: var(--panel-bg);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.quick-nav-item {
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: background-color 0.2s;
+    border-left: 2px solid transparent;
+}
+
+.quick-nav-item:hover {
+    background-color: var(--element-bg);
+    border-left-color: var(--action-blue);
+}
+
+.quick-nav-item.active {
+    background-color: var(--element-bg);
+    border-left-color: var(--action-blue);
+}
+
+/* Connection status in header */
+.connection-status {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.status-disconnected {
+    background-color: var(--action-red);
+    color: white;
+}
+
+.status-connected {
+    background-color: var(--action-green);
+    color: white;
+}
+
+/* Time remaining indicator */
+.time-remaining {
+    font-size: 0.75rem;
+    color: var(--subtext-color);
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+/* Reduce margins and padding for tight layout */
+* {
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0 0 5px 0;
+}
+
+/* Make borders thinner */
+.compact-section, .setting-item, .service-item {
+    border-width: 1px;
+}
+
+/* Quantum components */
+.qbits {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: 4px;
+    background-color: var(--element-bg);
+    height: 60px;
+}
+
+/* Layout Toggle Button */
+.layout-toggle-btn {
+    background-color: var(--action-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.layout-toggle-btn:hover {
+    background-color: var(--action-blue);
+    opacity: 0.9;
+}
+
+.default-layout-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+/* Style for the mobile view toggle button */
+@media (max-width: 768px) {
+    .layout-toggle-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}

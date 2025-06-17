@@ -1,0 +1,321 @@
+#!/usr/bin/env python
+# rl_tuning.py
+import gym
+from stable_baselines3 import PPO
+import numpy as np
+import json
+from flask import Flask, request, jsonify
+
+class TradingTuner(gym.Env):
+    def __init__(self):
+        super(TradingTuner, self).__init__()
+        
+        # Define action space (stop_loss, take_profit, position_size)
+        self.action_space = gym.spaces.Box(low=0.1, high=5.0, shape=(3,))  # [stop_loss%, take_profit%, position_size%]
+        
+        # Define observation space (market features)
+        self.observation_space = gym.spaces.Dict({
+            'market_volatility': gym.spaces.Box(low=0, high=100),  # Market volatility index
+            'strategy_performance': gym.spaces.Box(low=-1, high=1, shape=(3,))  # [swing, scalp, ai] performance scores
+        })
+        
+        # Initialize state
+        self.state = self._get_init_state()
+        self.episode_length = 0
+        self.max_episode_length = 100
+        
+        # Track trading performance
+        self.trade_history = []
+        
+        # Initialize learning progress data for visualization
+        self.learning_progress = {
+            'episodes': [],
+            'rewards': [],
+            'stop_loss': [],
+            'take_profit': [],
+            'position_size': []
+        }
+        
+        # Initialize model
+        self.model = None
+        try:
+            self.model = PPO.load("trading_tuner_model")
+            print("Loaded existing RL model")
+        except:
+            print("No existing model found, will train a new one")
+            self._init_model()
+
+    def _init_model(self):
+        """Initialize a new RL model"""
+        self.model = PPO('MultiInputPolicy', self, verbose=1)
+        print("Initialized new PPO model")
+
+    def _get_init_state(self):
+        """Get initial state with default values"""
+        return {
+            'market_volatility': np.array([20.0]),  # Medium volatility
+            'strategy_performance': np.array([0.0, 0.0, 0.0])  # Neutral performance
+        }
+
+    def step(self, action):
+        """Execute trade with new parameters"""
+        # Apply action (use parameters to execute trade)
+        stop_loss, take_profit, position_size = action
+        
+        # In a real system, this would connect to the trading engine
+        # Here we'll simulate the profit based on the parameters
+        profit = self._simulate_trade_profit(stop_loss, take_profit, position_size)
+        
+        # Update state based on the trade outcome
+        self._update_state(profit)
+        
+        # Calculate reward
+        reward = profit * 100  # Scale reward
+        
+        # Update episode counter
+        self.episode_length += 1
+        done = self.episode_length >= self.max_episode_length
+        
+        # Log the results for this step
+        self.trade_history.append({
+            'stop_loss': float(stop_loss),
+            'take_profit': float(take_profit),
+            'position_size': float(position_size),
+            'profit': float(profit),
+            'reward': float(reward)
+        })
+        
+        # Log learning progress
+        if len(self.learning_progress['episodes']) == 0:
+            episode = 1
+        else:
+            episode = self.learning_progress['episodes'][-1] + 1
+            
+        self.learning_progress['episodes'].append(episode)
+        self.learning_progress['rewards'].append(float(reward))
+        self.learning_progress['stop_loss'].append(float(stop_loss))
+        self.learning_progress['take_profit'].append(float(take_profit))
+        self.learning_progress['position_size'].append(float(position_size))
+        
+        return self._get_obs(), reward, done, {}
+
+    def _simulate_trade_profit(self, stop_loss, take_profit, position_size):
+        """Simulate profit based on parameters and current market state"""
+        # This is a simplified model that could be replaced with real backtesting
+        volatility = self.state['market_volatility'][0] / 100.0  # Normalize to 0-1
+        
+        # Higher take profit with appropriate stop loss in high volatility is good
+        # Too small position size in low volatility is bad
+        # Too large position size in high volatility is bad
+        
+        # Basic reward function
+        tp_sl_ratio = take_profit / stop_loss
+        pos_vol_ratio = position_size / (volatility * 10 + 0.1)
+        
+        # Ideal tp_sl_ratio increases with volatility
+        ideal_tp_sl = 1.5 + volatility * 2
+        tp_sl_score = 1.0 - abs(tp_sl_ratio - ideal_tp_sl) / ideal_tp_sl
+        
+        # Ideal position size decreases with volatility
+        ideal_pos_size = 3.0 * (1.0 - volatility * 0.7)
+        pos_size_score = 1.0 - abs(position_size - ideal_pos_size) / ideal_pos_size
+        
+        # Combine scores
+        profit = (tp_sl_score * 0.6 + pos_size_score * 0.4) * 0.2  # Max profit of 20%
+        
+        # Add some randomness to simulate real market conditions
+        noise = np.random.normal(0, 0.05)  # Small random factor
+        profit += noise
+        
+        return profit
+
+    def _update_state(self, profit):
+        """Update the state based on trade result"""
+        # Update volatility (simulate changing market conditions)
+        current_vol = self.state['market_volatility'][0]
+        volatility_change = np.random.uniform(-5, 5)  # Random market change
+        new_vol = np.clip(current_vol + volatility_change, 10, 90)  # Keep within bounds
+        
+        # Update strategy performance
+        # In reality, this would come from actual strategy performance metrics
+        strategy_perf = self.state['strategy_performance']
+        performance_change = np.random.uniform(-0.1, 0.1, size=3)
+        
+        # Profit impacts the strategy that was used
+        if profit > 0:
+            # Randomly boost one strategy more than others
+            strategy_idx = np.random.randint(0, 3)
+            performance_change[strategy_idx] += profit * 0.5
+            
+        new_perf = np.clip(strategy_perf + performance_change, -0.9, 0.9)
+        
+        # Set new state
+        self.state = {
+            'market_volatility': np.array([new_vol]),
+            'strategy_performance': new_perf
+        }
+
+    def reset(self):
+        """Reset the environment to start a new episode"""
+        self.state = self._get_init_state()
+        self.episode_length = 0
+        return self._get_obs()
+
+    def _get_obs(self):
+        """Get the current observation (state)"""
+        return self.state
+    
+    def tune_parameters(self, market_data):
+        """Use the trained model to predict optimal parameters"""
+        # Update state based on market data
+        if 'volatility' in market_data:
+            self.state['market_volatility'] = np.array([market_data['volatility']])
+        
+        if 'strategy_performance' in market_data:
+            perf_array = np.array([
+                market_data['strategy_performance'].get('swing', 0),
+                market_data['strategy_performance'].get('scalp', 0),
+                market_data['strategy_performance'].get('ai', 0)
+            ])
+            self.state['strategy_performance'] = perf_array
+        
+        # If we don't have a trained model yet, return default values
+        if self.model is None:
+            return {
+                'stop_loss': 2.0,
+                'take_profit': 4.0,
+                'position_size': 2.0
+            }
+        
+        # Use model to predict optimal parameters
+        obs = self._get_obs()
+        action, _ = self.model.predict(obs)
+        
+        # Return the recommended parameters
+        stop_loss, take_profit, position_size = action
+        
+        return {
+            'stop_loss': float(stop_loss),
+            'take_profit': float(take_profit),
+            'position_size': float(position_size)
+        }
+    
+    def train_model(self, iterations=1000):
+        """Train the RL model"""
+        if self.model is None:
+            self._init_model()
+        
+        # Train the model
+        self.model.learn(total_timesteps=iterations)
+        
+        # Save the trained model
+        self.model.save("trading_tuner_model")
+        
+        return {"status": "success", "iterations": iterations}
+    
+    def get_learning_progress(self):
+        """Get learning progress data for visualization"""
+        # Only return last 100 entries to avoid overwhelming the frontend
+        limit = 100
+        if len(self.learning_progress['episodes']) > limit:
+            return {
+                'episodes': self.learning_progress['episodes'][-limit:],
+                'rewards': self.learning_progress['rewards'][-limit:],
+                'stop_loss': self.learning_progress['stop_loss'][-limit:],
+                'take_profit': self.learning_progress['take_profit'][-limit:],
+                'position_size': self.learning_progress['position_size'][-limit:]
+            }
+        return self.learning_progress
+
+
+# Create Flask app for serving RL tuning
+app = Flask(__name__)
+tuner = TradingTuner()
+
+@app.route('/tune', methods=['GET', 'POST', 'OPTIONS'])
+def tune_endpoint():
+    """API endpoint for compatibility with frontend that expects a /tune endpoint"""
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        return '', 200
+        
+    # For GET or POST requests, return parameters similar to get-params
+    market_data = request.json if request.is_json else None
+    
+    # Default data if not provided
+    if not market_data:
+        market_data = {
+            'volatility': 20.0,
+            'strategy_performance': {
+                'swing': 0.1,
+                'scalp': 0.0,
+                'ai': 0.2
+            }
+        }
+        
+    # Get tuned parameters
+    params = tuner.tune_parameters(market_data)
+    return jsonify(params)
+
+@app.route('/get-params', methods=['POST'])
+def get_params():
+    """API endpoint for getting optimal parameters"""
+    market_data = request.json
+    
+    # Default data if not provided
+    if not market_data:
+        market_data = {
+            'volatility': 20.0,
+            'strategy_performance': {
+                'swing': 0.1,
+                'scalp': 0.0,
+                'ai': 0.2
+            }
+        }
+        
+    # Get tuned parameters
+    params = tuner.tune_parameters(market_data)
+    return jsonify(params)
+
+@app.route('/train', methods=['POST'])
+def train():
+    """API endpoint for training the model"""
+    data = request.json
+    iterations = data.get('iterations', 1000) if data else 1000
+    result = tuner.train_model(iterations)
+    return jsonify(result)
+
+@app.route('/learning-progress', methods=['GET'])
+def learning_progress():
+    """API endpoint for getting learning progress data"""
+    progress = tuner.get_learning_progress()
+    return jsonify(progress)
+
+@app.route('/', methods=['GET'])
+def root():
+    """Root endpoint for service status checks"""
+    return jsonify({"status": "ok", "service": "RL Parameter Tuning"})
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint"""
+    return jsonify({"status": "healthy", "service": "rl_tuning_service"})
+
+# Initialize Flask app at the module level so routes can be registered properly
+app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+
+# Enable CORS
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
+if __name__ == '__main__':
+    print("Starting RL parameter tuning service on port 6001...")
+    tuner = TradingTuner()  # Initialize our environment
+    
+    # Run the app
+    app.run(host='0.0.0.0', port=6001, debug=False)

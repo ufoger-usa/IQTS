@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Integration Tester</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .panel {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        #result {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-ok {
+            background-color: #27ae60;
+        }
+        
+        .status-error {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telegram Integration Tester</h1>
+        
+        <div class="panel">
+            <h2>Status</h2>
+            <div id="integration-status">Checking integration status...</div>
+        </div>
+        
+        <div class="panel">
+            <h2>Send Test Message</h2>
+            <div class="button-group">
+                <button id="test-notification">Send Basic Test Message</button>
+                <button id="test-formatted">Send Formatted Message</button>
+                <button id="test-alert">Send Alert</button>
+            </div>
+            
+            <div>
+                <label for="custom-message">Custom Message:</label>
+                <input type="text" id="custom-message" placeholder="Enter custom message to send">
+                <button id="send-custom">Send Custom Message</button>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Test Bot Commands</h2>
+            <div class="button-group">
+                <button id="cmd-status">/status</button>
+                <button id="cmd-pause">/pause</button>
+                <button id="cmd-resume">/resume</button>
+                <button id="cmd-help">/help</button>
+                <button id="test-all">Test All Commands</button>
+            </div>
+            
+            <div>
+                <label for="custom-command">Custom Command:</label>
+                <input type="text" id="custom-command" placeholder="Enter custom command (with /)">
+                <button id="send-custom-cmd">Execute</button>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Diagnostic Tools</h2>
+            <div class="button-group">
+                <button id="check-integration">Check Integration</button>
+                <button id="repair-integration">Repair Integration</button>
+            </div>
+        </div>
+        
+        <h2>Result</h2>
+        <pre id="result">Results will appear here</pre>
+    </div>
+    
+    <!-- Load required scripts -->
+    <script src="telegram-enhanced.js"></script>
+    <script src="telegram-test.js"></script>
+    <script src="telegramBot.js"></script>
+    <script src="telegram-debug.js"></script>
+    
+    <script>
+        // Wait for DOM content to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check initial status
+            setTimeout(checkStatus, 500);
+            
+            // Set up button handlers
+            document.getElementById('test-notification').addEventListener('click', function() {
+                logResult('Sending test notification...');
+                window.testTelegramNotification()
+                    .then(result => logResult('Test completed, check your Telegram app'));
+            });
+            
+            document.getElementById('test-formatted').addEventListener('click', function() {
+                logResult('Sending formatted message...');
+                if (typeof TelegramService.sendFormatted === 'function') {
+                    TelegramService.sendFormatted('Test Message', 'This is a formatted test message from the Telegram tester.')
+                        .then(result => logResult('Formatted message sent, check your Telegram app'));
+                } else {
+                    logResult('Error: Enhanced Telegram service not available');
+                }
+            });
+            
+            document.getElementById('test-alert').addEventListener('click', function() {
+                logResult('Sending alert...');
+                if (typeof TelegramService.sendAlert === 'function') {
+                    TelegramService.sendAlert('This is a test alert from the Telegram tester!')
+                        .then(result => logResult('Alert sent, check your Telegram app'));
+                } else {
+                    logResult('Error: Enhanced Telegram service not available');
+                }
+            });
+            
+            document.getElementById('send-custom').addEventListener('click', function() {
+                const message = document.getElementById('custom-message').value;
+                if (message) {
+                    logResult(`Sending custom message: "${message}"`);
+                    TelegramService.send(message)
+                        .then(result => logResult('Custom message sent, check your Telegram app'));
+                } else {
+                    logResult('Please enter a message to send');
+                }
+            });
+            
+            // Command test buttons
+            document.getElementById('cmd-status').addEventListener('click', () => testCommand('/status'));
+            document.getElementById('cmd-pause').addEventListener('click', () => testCommand('/pause'));
+            document.getElementById('cmd-resume').addEventListener('click', () => testCommand('/resume'));
+            document.getElementById('cmd-help').addEventListener('click', () => testCommand('/help'));
+            
+            document.getElementById('send-custom-cmd').addEventListener('click', function() {
+                const command = document.getElementById('custom-command').value;
+                if (command && command.startsWith('/')) {
+                    testCommand(command);
+                } else {
+                    logResult('Please enter a valid command starting with /');
+                }
+            });
+            
+            document.getElementById('test-all').addEventListener('click', function() {
+                logResult('Testing all commands...');
+                if (typeof TelegramDebug !== 'undefined' && typeof TelegramDebug.testAllCommands === 'function') {
+                    TelegramDebug.testAllCommands()
+                        .then(results => logResult('All commands tested, check the console for details'));
+                } else {
+                    logResult('TelegramDebug utility not available');
+                }
+            });
+            
+            // Diagnostic tools
+            document.getElementById('check-integration').addEventListener('click', function() {
+                logResult('Checking integration...');
+                if (typeof TelegramDebug !== 'undefined') {
+                    const status = TelegramDebug.checkIntegration();
+                    logResult(JSON.stringify(status, null, 2));
+                    checkStatus();
+                } else {
+                    logResult('TelegramDebug utility not available');
+                }
+            });
+            
+            document.getElementById('repair-integration').addEventListener('click', function() {
+                logResult('Attempting to repair integration...');
+                if (typeof TelegramDebug !== 'undefined' && typeof TelegramDebug.repairIntegration === 'function') {
+                    const result = TelegramDebug.repairIntegration();
+                    logResult(result);
+                    checkStatus();
+                } else {
+                    logResult('TelegramDebug repair utility not available');
+                }
+            });
+        });
+        
+        // Helper function to log results
+        function logResult(message) {
+            const resultArea = document.getElementById('result');
+            resultArea.textContent = message;
+            console.log(message);
+        }
+        
+        // Helper function to test commands
+        function testCommand(command) {
+            logResult(`Executing command: ${command}`);
+            window.testTelegramCommand(command)
+                .then(result => {
+                    if (result) {
+                        logResult(`Command ${command} executed successfully`);
+                    } else {
+                        logResult(`Command ${command} not recognized or failed`);
+                    }
+                });
+        }
+        
+        // Check the integration status
+        function checkStatus() {
+            const statusElement = document.getElementById('integration-status');
+            
+            // Check TelegramService
+            const serviceAvailable = typeof TelegramService !== 'undefined';
+            // Check Bot
+            const botAvailable = typeof TelegramBot !== 'undefined';
+            // Check command handler
+            const handlerAvailable = typeof window.handleTelegramCommand === 'function';
+            // Check enhanced features
+            const enhancedAvailable = typeof TelegramService !== 'undefined' && 
+                                    typeof TelegramService.sendFormatted === 'function';
+            // Check debug tools
+            const debugAvailable = typeof TelegramDebug !== 'undefined';
+            
+            let statusHtml = '';
+            
+            statusHtml += createStatusLine('TelegramService', serviceAvailable);
+            statusHtml += createStatusLine('TelegramBot', botAvailable);
+            statusHtml += createStatusLine('Command Handler', handlerAvailable);
+            statusHtml += createStatusLine('Enhanced Features', enhancedAvailable);
+            statusHtml += createStatusLine('Debug Tools', debugAvailable);
+            
+            statusElement.innerHTML = statusHtml;
+        }
+        
+        // Create a status line with indicator
+        function createStatusLine(name, isAvailable) {
+            const statusClass = isAvailable ? 'status-ok' : 'status-error';
+            const statusText = isAvailable ? 'Available' : 'Not Available';
+            
+            return `<div>
+                <span class="status-indicator ${statusClass}"></span>
+                <strong>${name}:</strong> ${statusText}
+            </div>`;
+        }
+    </script>
+</body>
+</html>

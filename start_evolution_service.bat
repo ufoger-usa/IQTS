@@ -1,0 +1,3 @@
+@echo off
+echo Starting Genetic Algorithm Strategy Evolution service...
+python genetic_algorithm.py

@@ -1,0 +1,184 @@
+/* RL Tuning Dashboard Styles */
+
+.panel#rl-tuning {
+  border-left: 4px solid #E91E63;
+  margin-bottom: 20px;
+}
+
+.panel#rl-tuning h3 {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+.panel#rl-tuning h3::before {
+  content: '🤖';
+  margin-right: 10px;
+}
+
+.param {
+  background-color: var(--panel-bg);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.param label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.param-change {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 0.85em;
+  margin-left: auto;
+}
+
+.positive {
+  background-color: rgba(39, 174, 96, 0.2);
+  color: var(--positive);
+}
+
+.negative {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: var(--negative);
+}
+
+.neutral {
+  background-color: rgba(127, 140, 141, 0.2);
+  color: var(--neutral);
+}
+
+.learning-graph {
+  margin-top: 15px;
+  background-color: var(--panel-bg);
+  border-radius: 6px;
+  padding: 15px;
+  height: 300px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#learningProgressChart {
+  width: 100%;
+  height: 100%;
+}
+
+.rl-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+#tune-now {
+  background-color: #E91E63;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#tune-now:hover {
+  background-color: #C2185B;
+}
+
+.auto-tune-container {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: var(--signal-bg);
+  border-radius: 6px;
+}
+
+.rl-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.rl-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.rl-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.rl-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .rl-toggle-slider {
+  background-color: #E91E63;
+}
+
+input:focus + .rl-toggle-slider {
+  box-shadow: 0 0 1px #E91E63;
+}
+
+input:checked + .rl-toggle-slider:before {
+  transform: translateX(26px);
+}
+
+.rl-toggle-label {
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+.rl-toggle-status {
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#rl-status-indicator {
+  background-color: #ccc;
+  color: #333;
+}
+
+#rl-status-indicator.active {
+  background-color: rgba(233, 30, 99, 0.2);
+  color: #E91E63;
+}
+
+@media (max-width: 768px) {
+  .rl-controls {
+    flex-direction: column;
+  }
+  
+  .auto-tune-container {
+    margin-top: 10px;
+  }
+}

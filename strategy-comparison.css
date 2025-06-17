@@ -1,0 +1,74 @@
+.panel#strategy-comparison {
+  margin-bottom: 20px;
+}
+
+.strategy-tab {
+  background-color: var(--tab-bg);
+  color: var(--text);
+  border: none;
+  padding: 10px 15px;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.strategy-tab:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.strategy-tab.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+.comparison-chart {
+  width: 100%;
+  height: 400px;
+  margin-top: 20px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#strategyChart {
+  width: 100%;
+  height: 100%;
+}
+
+.strategy-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.strategy-stat-card {
+  background-color: var(--panel-bg);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.strategy-stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.strategy-stat-label {
+  color: var(--neutral);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .strategy-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .comparison-chart {
+    height: 300px;
+  }
+}

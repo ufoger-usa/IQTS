@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0069d9;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Service Connection Test</h1>
+    <p>This tool helps test the connection to your backend services.</p>
+    
+    <div>
+        <button id="test-service-starter">Test Service Starter (Port 3000)</button>
+        <button id="test-ai-analysis">Test AI Analysis (Port 8000)</button>
+        <button id="test-rl-tuning">Test RL Tuning (Port 6001)</button>
+        <button id="test-strategy-evolution">Test Strategy Evolution (Port 7000)</button>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Function to add result to the page
+        function addResult(message, isSuccess) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${isSuccess ? 'success' : 'error'}`;
+            resultDiv.textContent = message;
+            resultsDiv.prepend(resultDiv);
+        }
+        
+        // Function to test a connection
+        async function testConnection(url, description) {
+            try {
+                const startTime = new Date();
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const endTime = new Date();
+                const timeMs = endTime - startTime;
+                
+                if (response.ok) {
+                    let data;
+                    try {
+                        data = await response.json();
+                        addResult(`✅ ${description} - Connected successfully (${timeMs}ms). Response: ${JSON.stringify(data)}`, true);
+                    } catch (err) {
+                        addResult(`⚠️ ${description} - Connected but invalid JSON response (${timeMs}ms)`, true);
+                    }
+                } else {
+                    addResult(`❌ ${description} - Error ${response.status}: ${response.statusText}`, false);
+                }
+            } catch (error) {
+                addResult(`❌ ${description} - Connection failed: ${error.message}`, false);
+            }
+        }
+        
+        // Event listeners for buttons
+        document.getElementById('test-service-starter').addEventListener('click', () => {
+            testConnection('http://localhost:3000/', 'Service Starter');
+        });
+        
+        document.getElementById('test-ai-analysis').addEventListener('click', () => {
+            testConnection('http://localhost:8000/', 'AI Analysis Service');
+        });
+        
+        document.getElementById('test-rl-tuning').addEventListener('click', () => {
+            testConnection('http://localhost:6001/', 'RL Tuning Service');
+        });
+        
+        document.getElementById('test-strategy-evolution').addEventListener('click', () => {
+            testConnection('http://localhost:7000/', 'Strategy Evolution Service');
+        });
+    </script>
+</body>
+</html>

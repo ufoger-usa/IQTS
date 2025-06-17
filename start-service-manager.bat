@@ -1,0 +1,3 @@
+@echo off
+echo Starting Service Starter on port 3000...
+node service-starter.js

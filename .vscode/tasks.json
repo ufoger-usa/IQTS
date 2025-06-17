@@ -1,0 +1,69 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start AI Analysis Service (Port 8000)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"analysis_service.py"
+			],
+			"group": "test",
+			"isBackground": true,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Start RL Tuning Service (Port 6000)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"rl_tuning.py"
+			],
+			"group": "test",
+			"isBackground": true,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Start Strategy Evolution Service (Port 7000)",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"genetic_algorithm.py"
+			],
+			"group": "test",
+			"isBackground": true,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Start All Services",
+			"type": "shell",
+			"command": ".\\start_all_services.bat",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Stop All Services",
+			"type": "shell",
+			"command": ".\\stop_all_services.bat",
+			"group": "test",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": []
+		}
+	]
+}

@@ -1,0 +1,118 @@
+.ai-insights {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .ai-insights,
+.dark .ai-insights,
+body.dark-mode .ai-insights {
+    border-color: #444;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.ai-insights h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Dark mode header */
+[data-theme="dark"] .ai-insights h3,
+.dark .ai-insights h3,
+body.dark-mode .ai-insights h3 {
+    color: #e0e0e0;
+    border-bottom-color: #444;
+}
+
+.insight {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.insight span {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.insight.positive {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-left: 4px solid #4CAF50;
+}
+
+.insight.warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-left: 4px solid #FF9800;
+}
+
+/* Dark mode insights */
+[data-theme="dark"] .insight.positive,
+.dark .insight.positive,
+body.dark-mode .insight.positive {
+    background-color: rgba(76, 175, 80, 0.2);
+    border-left: 4px solid #4CAF50;
+}
+
+[data-theme="dark"] .insight.warning,
+.dark .insight.warning,
+body.dark-mode .insight.warning {
+    background-color: rgba(255, 152, 0, 0.2);
+    border-left: 4px solid #FF9800;
+}
+
+#ai-best-strategy, #ai-warning {
+    font-weight: bold;
+}
+
+.emoji-icon {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+/* Refresh button styling */
+#refresh-ai-analysis {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+#refresh-ai-analysis:hover {
+    background-color: #e0e0e0;
+}
+
+/* Dark mode refresh button */
+[data-theme="dark"] #refresh-ai-analysis,
+.dark #refresh-ai-analysis,
+body.dark-mode #refresh-ai-analysis {
+    background-color: #444;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+[data-theme="dark"] #refresh-ai-analysis:hover,
+.dark #refresh-ai-analysis:hover,
+body.dark-mode #refresh-ai-analysis:hover {
+    background-color: #555;
+}
+
+/* Animation for insights refresh */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.refreshing {
+    animation: pulse 1.5s infinite;
+}

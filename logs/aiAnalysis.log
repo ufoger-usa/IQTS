@@ -1,0 +1,22 @@
+ * Serving Flask app 'analysis_service'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.86.63:8000
+Press CTRL+C to quit
+127.0.0.1 - - [17/Jun/2025 09:36:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:36:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:22] "GET /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:37:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:23] "GET /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:38:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:41] "GET /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [17/Jun/2025 09:39:41] "GET / HTTP/1.1" 200 -

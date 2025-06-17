@@ -1,0 +1,100 @@
+/* strategy-evolution.css */
+.panel[id="strategy-evolution"] {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: var(--panel-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.generation-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--tab-bg);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#gen-counter, #best-fitness {
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 1.2em;
+}
+
+.dna-visualization {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--panel-bg);
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dna-strand {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dna-gene {
+    display: grid;
+    grid-template-columns: 100px 50px 1fr;
+    align-items: center;
+    gap: 15px;
+}
+
+.gene-label {
+    font-weight: 500;
+    color: var(--text);
+}
+
+.gene-value {
+    font-family: monospace;
+    font-weight: bold;
+    text-align: right;
+    color: var(--primary);
+}
+
+.gene-bar {
+    height: 15px;
+    background-color: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.gene-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--positive), #8BC34A);
+    border-radius: 10px;
+}
+
+#run-evolution {
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#run-evolution:hover {
+    background-color: #1e5daa;
+}
+
+#run-evolution:disabled {
+    background-color: var(--neutral);
+    cursor: not-allowed;
+}
+
+/* Evolution history chart */
+.evolution-chart-container {
+    margin-top: 20px;
+    height: 200px;
+    width: 100%;
+}

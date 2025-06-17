@@ -1,0 +1,13 @@
+{
+  "name": "iqts-chatbot-service-manager",
+  "version": "1.0.0",
+  "description": "Service Manager for IQTS ChatBot Backend Services",
+  "main": "service-starter.js",
+  "scripts": {
+    "start": "node service-starter.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
